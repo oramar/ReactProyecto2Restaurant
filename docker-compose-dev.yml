@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+
+  restaurant:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: container_restaurant  
+    ports:
+      - "8005:8005"    
+    depends_on:
+      - dbpostgresrestaurant  
+    links:
+      - dbpostgresrestaurant
+    volumes:
+      - .:/home/app
+    networks:
+      app_network_restaurant:
+        aliases:
+          - app_host_restaurant
+
+  dbpostgresrestaurant:    
+    container_name: container_dbpostgres_restaurant
+    image: postgres:15.1-alpine   
+    restart: always
+    environment:     
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+   
+    ports: 
+      - "5438:5432"    
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      app_network_restaurant:
+        aliases:
+          - data_host_restaurant
+volumes:
+
+  pgdata:
+networks:
+  app_network_restaurant:
+    name: restaurantDb
+    driver: bridge
+    ipam:
+      driver: default
+
+
+
+
+  
+    
