@@ -13,6 +13,7 @@ const initModel = require('./initModels');
 const { db } = require('../databases/db');
 const globalErrorHandler = require('../controllers/error.controller');
 const { routerAuth } = require('../routers/auth.routes');
+const { routerRestaurant } = require('../routers/restaurant.routes');
 class Server {
   constructor() {
     this.app = express();
@@ -53,6 +54,7 @@ class Server {
   router() { 
         //utilizar las rutas de autenticacion
         this.app.use(this.paths.auth, routerAuth);
+        this.app.use(this.paths.restaurants, routerRestaurant);
         this.app.all('*',(req,res,next)=>{
           return next(
             new AppError(`Can't find ${req.originalUrl} on this server!`, 404)

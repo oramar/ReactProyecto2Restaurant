@@ -1,5 +1,27 @@
 const { check } = require('express-validator');
 
+//Verificamos que el usuario ingrese la informacion completa para registrar usuario
+exports.registerUserValidation = [
+  check('name', 'The name must be mandatory').not().isEmpty(),
+  check('email', 'The email must be mandatory').not().isEmpty(),
+  check('email', 'The email must be a correct format').isEmail(),
+  check('password', 'The password must be mandatory').not().isEmpty(),
+];
+//Verificamos si el email y password a sido ingresado por el usuario
+exports.loginUserValidation = [
+  check('email', 'The email must be mandatory').not().isEmpty(),
+  check('email', 'The email must be a correct format').isEmail(),
+  check('password', 'The password must be mandatory').not().isEmpty(),
+];
+
+//Validamos que el usuario actualice la contraseña correctamente
+exports.updatePasswordUserValidation = [
+  check('currentPassword', 'The current password must be mandatory')
+    .not()
+    .isEmpty(),
+  check('newPassword', 'The new password must be mandatory').not().isEmpty(),
+];
+
 exports.createProductValidation = [
   check('title', 'The title is required').not().isEmpty(),
   check('description', 'The description is required').not().isEmpty(),
@@ -28,12 +50,6 @@ exports.updateUserValidation = [
   check('email', 'The email must be a correct format').isEmail(),
 ];
 
-exports.updatePasswordUserValidation = [
-  check('currentPassword', 'The current password must be mandatory')
-    .not()
-    .isEmpty(),
-  check('newPassword', 'The new password must be mandatory').not().isEmpty(),
-];
 
 exports.addProductToCartValidation = [
   check('productId', 'The producId is required').not().isEmpty(),
@@ -47,17 +63,4 @@ exports.updateProductToCartValidation = [
   check('productId', 'The producId must be a number').isNumeric(),
   check('newQty', 'The quantity is required').not().isEmpty(),
   check('newQty', 'The quantity must be a number').isNumeric(),
-];
-
-exports.registerUserValidation = [
-  check('name', 'The name must be mandatory').not().isEmpty(),
-  check('email', 'The email must be mandatory').not().isEmpty(),
-  check('email', 'The email must be a correct format').isEmail(),
-  check('password', 'The password must be mandatory').not().isEmpty(),
-];
-
-exports.loginUserValidation = [
-  check('email', 'The email must be mandatory').not().isEmpty(),
-  check('email', 'The email must be a correct format').isEmail(),
-  check('password', 'The password must be mandatory').not().isEmpty(),
 ];
