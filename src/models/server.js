@@ -5,8 +5,14 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
+
+//registrar solicitudes http
+const morgan = require('morgan');
+
 const initModel = require('./initModels');
 const { db } = require('../databases/db');
+const globalErrorHandler = require('../controllers/error.controller');
+const { routerAuth } = require('../routers/auth.routes');
 class Server {
   constructor() {
     this.app = express();
@@ -44,7 +50,16 @@ class Server {
     //mostramos formato Json la respuestas
     this.app.use(express.json());
   }
-  router() {   }
+  router() { 
+        //utilizar las rutas de autenticacion
+        this.app.use(this.paths.auth, routerAuth);
+        this.app.all('*',(req,res,next)=>{
+          return next(
+            new AppError(`Can't find ${req.originalUrl} on this server!`, 404)
+          );
+        })
+        this.app.use(globalErrorHandler);
+    }
   database(){
     db.authenticate()//Devuelve una promesa
     .then(()=>console.log('Database Authenticated'))

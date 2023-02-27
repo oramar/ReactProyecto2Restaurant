@@ -30,7 +30,11 @@ const User = db.define('user', {
     type: DataTypes.ENUM('normal', 'admin'),
     allowNull: false,
     defaultValue: 'normal',
-  }
+  },
+  passwordChangedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
   
 
 });
