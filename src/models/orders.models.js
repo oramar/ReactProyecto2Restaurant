@@ -25,10 +25,7 @@ const Order = db.define('order',{
         type:DataTypes.INTEGER,
         allowNull:false,
     },
-    RestaurantId:{
-        type:DataTypes.INTEGER,
-        allowNull:false,
-    },
+   
     status:{
         type:DataTypes.ENUM('active', 'cancelled','completed'),
         allowNull:false,

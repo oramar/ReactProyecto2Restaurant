@@ -14,6 +14,10 @@ const { db } = require('../databases/db');
 const globalErrorHandler = require('../controllers/error.controller');
 const { routerAuth } = require('../routers/auth.routes');
 const { routerRestaurant } = require('../routers/restaurant.routes');
+const { routerMeal } = require('../routers/meal.routes');
+const { routerOrder } = require('../routers/order.routes');
+const AppError = require('../utils/appError');
+const { routerUser } = require('../routers/user.routes');
 class Server {
   constructor() {
     this.app = express();
@@ -54,7 +58,10 @@ class Server {
   router() { 
         //utilizar las rutas de autenticacion
         this.app.use(this.paths.auth, routerAuth);
+        this.app.use(this.paths.users,routerUser)
         this.app.use(this.paths.restaurants, routerRestaurant);
+        this.app.use(this.paths.meals,routerMeal)
+        this.app.use(this.paths.orders,routerOrder)
         this.app.all('*',(req,res,next)=>{
           return next(
             new AppError(`Can't find ${req.originalUrl} on this server!`, 404)
@@ -69,7 +76,7 @@ class Server {
 
     //Relacionamos las tablas
     initModel()
-    db.sync()//{force:true} borra todos los datos de la aplicacion
+    db.sync({} )//{force:true} borra todos los datos de la aplicacion
     .then(() => console.log('Database synced'))
     .catch(error => console.log(error));
   }
